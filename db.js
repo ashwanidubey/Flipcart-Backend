@@ -1,8 +1,12 @@
+require('dotenv').config()
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/flipkart-clone', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const mongoURI= process.env.MONGO_URI
 
-module.exports = mongoose.connection;
+
+const connectToMongo = async ()=>{
+   mongoose.connect(mongoURI).then(() => console.log('mongo Connected to server'));
+   
+}
+
+module.exports = connectToMongo ;

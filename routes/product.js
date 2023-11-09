@@ -4,7 +4,7 @@ const productFunctions = require('../functions/productFunctions');
 const authMiddleware=require('../middleware/authMiddleware');
 
 // Search products route
-router.post('/search',  authMiddleware.isAuthenticated, productFunctions.searchProducts);
-router.get('/searchall',authMiddleware.isAuthenticated, productFunctions.searchAllProducts);
+router.get('/search',  productFunctions.searchProducts);
+router.get('/searchall', productFunctions.searchAllProducts);
 
 module.exports = router;

@@ -19,7 +19,7 @@ const productFunctions = {
   searchAllProducts: async (req, res) => {
     
     try {
-       const items = await Product.find({  });
+       const items = await Product.find({});
 
       res.json({ items, success: true, message: "searched successfully" });
     } catch (error) {

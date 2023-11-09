@@ -8,9 +8,7 @@ const orderFunctions = {
     placeOrder: async (req, res) => {
         try {
             const { user,product , quantity } = req.body;
-            const orderId = uuid.v4();
             const order = new Order({
-                _id: new mongoose.Types.ObjectId(),
                 user,
                 product,
                 quantity,
@@ -20,13 +18,14 @@ const orderFunctions = {
             
             // Save the order to the database
             await order.save();
+            //console.log("||||||", order._id, data )
             const data=await User.findOne({_id:user})
             console.log("/////", order._id, data )
             await User.findByIdAndUpdate(user, { $push: { orderDetails: order._id } });
 
 
 
-            res.json({ message: 'Order placed successfully', orderId });
+            res.json({ message: 'Order placed successfully', orderId:order._id });
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: 'Internal server error' });
@@ -41,7 +40,7 @@ const orderFunctions = {
             // You should validate the data and handle errors appropriately
 
             // Find the order by orderId and user
-            const order = await Order.findOne({ orderId, user });
+            const order = await Order.findOne({ _id:orderId });
 
             if (!order) {
                 return res.status(404).json({ message: 'Order not found' });
@@ -49,7 +48,7 @@ const orderFunctions = {
 
             // Check if the order is already canceled or delivered
             if (order.status === 'Canceled' || order.status === 'Delivered') {
-                return res.status(400).json({ message: 'Cannot cancel order; it is already canceled or delivered' });
+                return res.status(400).json({ message: `Cannot cancel order; it is already ${order.status}`});
             }
 
             // Update the order status to 'Canceled'

@@ -4,15 +4,15 @@ const db = require('./db');
 const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/product');
 const orderRoutes = require('./routes/order');
+const connectToMongo = require('./db.js');
+
+
 
 // Middleware for parsing JSON
 app.use(express.json());
 
 // Connect to the database
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to the database');
-});
+connectToMongo();
 
 // Routes
 app.use('/auth', authRoutes);
