@@ -1,15 +1,22 @@
 // functions/orderFunctions.js
 const Order = require('../models/Order');
 const User = require('../models/User');
+const Product = require('../models/Product')
 const mongoose = require('mongoose');
 const uuid = require('uuid');
 
 const orderFunctions = {
     placeOrder: async (req, res) => {
         try {
-            const { user,product , quantity } = req.body;
+            const { product , quantity } = req.body;
+            const userid=req.userid
+            if(!userid || !product || !quantity ) 
+            {
+                res.send({status:false,message:"not proper input"})
+                return ;
+           }
             const order = new Order({
-                user,
+                user:userid,
                 product,
                 quantity,
                 orderDate: new Date(),
@@ -18,10 +25,9 @@ const orderFunctions = {
             
             // Save the order to the database
             await order.save();
-            //console.log("||||||", order._id, data )
-            const data=await User.findOne({_id:user})
+            const data=await User.findOne({_id:userid})
             console.log("/////", order._id, data )
-            await User.findByIdAndUpdate(user, { $push: { orderDetails: order._id } });
+            await User.findByIdAndUpdate(userid, { $push: { orderDetails: order._id } });
 
 
 
@@ -63,6 +69,37 @@ const orderFunctions = {
             res.status(500).json({ message: 'Internal server error' });
         }
     },
+    orderItem:  async (req, res) => {
+        try {
+            const userid=req.userid
+            const user=await User.findOne({_id:userid})
+            const orderIdList= user.orderDetails 
+            console.log("await orderIdList")
+
+            const productPromises = orderIdList.map(async (item) => {
+                const order = await Order.findOne({ _id: item });
+                const product = await order.product;
+                console.log(product);
+    
+                return {product,
+                    "quantity": order.quantity,
+                    "orderDate": order.orderDate,
+                    "status": order.status
+                };
+            });
+    
+            const productlist = await Promise.all(productPromises);
+            console.log("productlist")
+            console.log(productlist)
+            res.send({"success":true, productlist})
+
+            
+        }catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+
+    }
 };
 
 module.exports = orderFunctions;

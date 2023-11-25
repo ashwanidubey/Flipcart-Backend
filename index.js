@@ -6,7 +6,8 @@ const productRoutes = require('./routes/product');
 const orderRoutes = require('./routes/order');
 const connectToMongo = require('./db.js');
 
-
+const cors = require('cors');
+app.use(cors()); 
 
 // Middleware for parsing JSON
 app.use(express.json());
@@ -15,6 +16,9 @@ app.use(express.json());
 connectToMongo();
 
 // Routes
+app.options('*', (res, req) => {
+  res.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE,OPTIONS')
+ })
 app.use('/auth', authRoutes);
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);

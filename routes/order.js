@@ -9,4 +9,6 @@ router.post('/placeorder', authMiddleware.isAuthenticated, orderFunctions.placeO
 // Cancel order route
 router.post('/cancelorder', authMiddleware.isAuthenticated, orderFunctions.cancelOrder);
 
+router.get('/findorder', authMiddleware.isAuthenticated, orderFunctions.orderItem);
+
 module.exports = router;

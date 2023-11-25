@@ -7,8 +7,16 @@ const orderSchema = new mongoose.Schema({
     },
 
     product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        Title: String,
+        Ratings: Number,
+        Reviews: Number,
+        Price: Number,
+        Quantity: Number,
+        Image: String,
+        Stars: Number,
+        Description: String,
+        Category: String,
+        Sub_Category: String,
     },
     quantity: Number,
     orderDate: Date,

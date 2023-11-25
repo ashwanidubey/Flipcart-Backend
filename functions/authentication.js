@@ -12,9 +12,7 @@ const authentication = {
 
             // Check if the email and password match a user in the database
             const user = await User.findOne({ email });
-            console.log("hii")
-            console.log(email,password,user)
-            if (!user) {
+              if (!user) {
                 return res.status(401).json({ success: false, message: 'Invalid email or password' });
             }
               //validating passowrd
@@ -23,7 +21,7 @@ const authentication = {
          if(passwordmatched==true)
         {
         const payload={id:user.id} 
-        console.log(payload)
+        
         const token = jwt.sign(payload, jwt_secrets,{ expiresIn: '1h' });
 
          //sending response
@@ -59,9 +57,7 @@ const authentication = {
             };
     
             const user= await User.create(data);
-
-           //creating jwt token
-           const payload={id:user.id} 
+             const payload={id:user.id} 
            const token = jwt.sign(payload, jwt_secrets,{ expiresIn: '1h' });
 
            //sending response
