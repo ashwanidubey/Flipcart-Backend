@@ -26,7 +26,6 @@ const orderFunctions = {
             // Save the order to the database
             await order.save();
             const data=await User.findOne({_id:userid})
-            console.log("/////", order._id, data )
             await User.findByIdAndUpdate(userid, { $push: { orderDetails: order._id } });
 
 
@@ -42,10 +41,11 @@ const orderFunctions = {
         try {
             // Assuming you have the orderId and userId in the request
             const { orderId, user } = req.body;
-
+         
             // You should validate the data and handle errors appropriately
 
             // Find the order by orderId and user
+          
             const order = await Order.findOne({ _id:orderId });
 
             if (!order) {
@@ -74,23 +74,20 @@ const orderFunctions = {
             const userid=req.userid
             const user=await User.findOne({_id:userid})
             const orderIdList= user.orderDetails 
-            console.log("await orderIdList")
 
             const productPromises = orderIdList.map(async (item) => {
                 const order = await Order.findOne({ _id: item });
                 const product = await order.product;
-                console.log(product);
     
                 return {product,
                     "quantity": order.quantity,
                     "orderDate": order.orderDate,
-                    "status": order.status
+                    "status": order.status,
+                    "orderId":order._id
                 };
             });
     
             const productlist = await Promise.all(productPromises);
-            console.log("productlist")
-            console.log(productlist)
             res.send({"success":true, productlist})
 
             

@@ -9,7 +9,7 @@ const authMiddleware = {
    
       const token = req.header('token');
      
-      if (token == "") {
+      if (token === "") {
         return res.status(401).send({ error: "invalid token 1" });
       }
       const dectoken = await jwt.verify(token, jwt_secrets);

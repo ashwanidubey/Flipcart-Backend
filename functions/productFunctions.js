@@ -3,7 +3,7 @@ const Product = require('../models/Product')
 const productFunctions = {
   searchProducts: async (req, res) => {
     try {
-      const { searchWord } = req.body; // Assuming the search word is provided in the query string
+      const searchWord  = req.query.searchWord; // Assuming the search word is provided in the query string
       if (typeof searchWord !== 'string') {
         return res.status(400).json({ success: false, message: 'Invalid search word' });
       }

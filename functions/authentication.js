@@ -18,7 +18,7 @@ const authentication = {
               //validating passowrd
             const passwordmatched=await bcrypt.compareSync(password,user.password);
   
-         if(passwordmatched==true)
+         if(passwordmatched===true)
         {
         const payload={id:user.id} 
         
@@ -26,6 +26,11 @@ const authentication = {
 
          //sending response
         return res.send({token,success:true,email,name:user.name});
+        }
+        else
+        {
+            return res.status(401).json({ success: false, message: 'Invalid email or password' });
+         
         }
 
         
